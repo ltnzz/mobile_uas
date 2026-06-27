@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:background="?android:attr/colorBackground">
 
+    <!-- Logo Aplikasi -->
     <ImageView
-        android:id="@+id/imgLogo"
+        android:id="@+id/logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginBottom="20dp"
-        android:src="@android:drawable/ic_menu_gallery" /> <!-- Ganti ke @drawable/logo_endemik jika filenya sudah ada -->
+        android:layout_centerInParent="true"
+        android:src="@drawable/fotoi" /> <!-- Ganti dengan logo aplikasi jika ada -->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Selamat Datang di EndemikDB"
-        android:textSize="20sp"
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="EndemikDB"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginBottom="30dp"
-        android:textAlignment="center"/>
+        android:textColor="?android:attr/textColorPrimary" />
 
-    <Button
-        android:id="@+id/btnMengerti"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Saya Mengerti" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:text="v1.0 - Latanza"
+        android:textColor="?android:attr/textColorSecondary" />
 
-</LinearLayout>
+</RelativeLayout>

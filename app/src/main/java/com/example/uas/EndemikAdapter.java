@@ -1,6 +1,6 @@
 package com.example.uas;
 
-import android.content.Intent; // Added missing import
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import java.util.List;
 
-// 1. Ensure the generic type matches: <EndemikAdapter.ViewHolder>
 public class EndemikAdapter extends RecyclerView.Adapter<EndemikAdapter.ViewHolder> {
+    // Pastikan namanya konsisten, kita gunakan "list"
     private List<EndemikModel> list;
 
     public EndemikAdapter(List<EndemikModel> list) {
@@ -27,37 +27,46 @@ public class EndemikAdapter extends RecyclerView.Adapter<EndemikAdapter.ViewHold
     }
 
     @Override
-    // 2. Changed EndemikViewHolder to ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // 3. Changed listEndemik to list (to match your variable name above)
+        // PERBAIKAN: Ganti listData menjadi list
         EndemikModel data = list.get(position);
 
         holder.tvNama.setText(data.getNama());
 
-        Glide.with(holder.itemView.getContext())
-                .load(data.getGambarUrl())
-                .into(holder.img); // 4. Changed imgItem to img (to match ViewHolder class)
+        // TAMPILKAN WILAYAH (REGION)
+        if (data.getAsal() != null) {
+            holder.tvAsal.setText("Wilayah: " + data.getAsal());
+        } else {
+            holder.tvAsal.setText("Wilayah: Tidak diketahui");
+        }
 
+        // Load Gambar (Pastikan holder.imgItem sudah didefinisikan di ViewHolder)
+        Glide.with(holder.itemView.getContext())
+                .load(data.getGambar())
+                .into(holder.imgItem);
+
+        // Intent ke Detail
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), DetailActivity.class);
-            intent.putExtra("NAMA", data.getNama());
-            intent.putExtra("GAMBAR", data.getGambarUrl());
-            intent.putExtra("DESKRIPSI", data.getDeskripsi()); // Deskripsi dikirim ke sini
+            intent.putExtra("DATA_ENDEMIK", data);
             v.getContext().startActivity(intent);
         });
     }
 
     @Override
-    public int getItemCount() { return list.size(); }
+    public int getItemCount() {
+        return list != null ? list.size() : 0;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvNama; // tvDesc dihapus
-        ImageView img;
+        TextView tvNama, tvAsal; // Tambahkan tvAsal
+        ImageView imgItem; // Samakan nama dengan yang dipakai di Glide
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNama = itemView.findViewById(R.id.tvNama);
-            img = itemView.findViewById(R.id.imgItem);
+            tvAsal = itemView.findViewById(R.id.tvAsal); // Inisialisasi tvAsal
+            imgItem = itemView.findViewById(R.id.imgItem); // Inisialisasi imgItem
         }
     }
 }

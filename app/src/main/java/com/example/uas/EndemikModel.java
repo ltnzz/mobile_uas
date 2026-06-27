@@ -1,37 +1,49 @@
 package com.example.uas;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
-public class EndemikModel {
+public class EndemikModel implements Serializable {
     @SerializedName("nama")
     private String nama;
+
+    @SerializedName("tipe") // Di JSON kuncinya "tipe", bukan "jenis"
+    private String jenis;
+
+    @SerializedName("foto") // Di JSON kuncinya "foto", bukan "gambar"
+    private String gambar;
+
+    @SerializedName("asal")
+    private String asal;
 
     @SerializedName("deskripsi")
     private String deskripsi;
 
-    // INI YANG PALING PENTING:
-    // Di JSON namanya "tipe", di Java kita sebut "jenis"
-    @SerializedName("tipe")
-    private String jenis;
+    // Constructor Kosong (Wajib untuk Retrofit)
+    public EndemikModel() {}
 
-    // Di JSON namanya "foto", di Java kita sebut "gambarUrl"
-    @SerializedName("foto")
-    private String gambarUrl;
-
-    // Getter untuk Jenis/Tipe
-    public String getJenis() {
-        return jenis;
+    // Constructor Lengkap (Untuk Room/Favorite)
+    public EndemikModel(String nama, String asal, String gambar, String deskripsi, String jenis) {
+        this.nama = nama;
+        this.asal = asal;
+        this.gambar = gambar;
+        this.deskripsi = deskripsi;
+        this.jenis = jenis;
     }
 
-    public String getNama() {
-        return nama;
-    }
+    // GETTER & SETTER
+    public String getNama() { return nama; }
+    public void setNama(String nama) { this.nama = nama; }
 
-    public String getDeskripsi() {
-        return deskripsi;
-    }
+    public String getJenis() { return jenis; }
+    public void setJenis(String jenis) { this.jenis = jenis; }
 
-    public String getGambarUrl() {
-        return gambarUrl;
-    }
+    public String getGambar() { return gambar; }
+    public void setGambar(String gambar) { this.gambar = gambar; }
+
+    public String getAsal() { return asal; }
+    public void setAsal(String asal) { this.asal = asal; }
+
+    public String getDeskripsi() { return deskripsi; }
+    public void setDeskripsi(String deskripsi) { this.deskripsi = deskripsi; }
 }

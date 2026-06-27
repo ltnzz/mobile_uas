@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F5F5F5"
+    android:background="?android:attr/colorBackground"
     android:fitsSystemWindows="true">
 
     <!-- Header Custom untuk Koleksi -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/white"
+        android:background="?android:attr/colorBackground"
         android:elevation="4dp"
         android:paddingHorizontal="16dp">
 
@@ -21,14 +21,15 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:padding="8dp"
-            android:src="@drawable/ic_arrow_back" />
+            android:src="@drawable/ic_arrow_back"
+            android:tint="?android:attr/textColorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="Koleksi Favorit"
-            android:textColor="@color/black"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -41,7 +42,7 @@
             android:layout_centerVertical="true"
             android:padding="8dp"
             android:src="@drawable/ic_love_on"
-            android:tint="#FF0000" />
+            android:tint="@color/accent_color" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
