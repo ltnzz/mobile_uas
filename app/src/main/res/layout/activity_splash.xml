@@ -10,7 +10,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/fotoi" /> <!-- Ganti dengan logo aplikasi jika ada -->
+        android:src="@drawable/logo" /> <!-- Ganti dengan logo aplikasi jika ada -->
 
     <TextView
         android:layout_width="wrap_content"

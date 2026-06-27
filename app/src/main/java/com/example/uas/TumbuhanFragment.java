@@ -23,6 +23,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -128,35 +130,72 @@ public class TumbuhanFragment extends Fragment {
             @Override
             public void onResponse(Call<List<EndemikModel>> call, Response<List<EndemikModel>> response) {
                 if (isAdded() && response.isSuccessful() && response.body() != null) {
-                    allDataList.clear();
-                    Set<String> wilayahSet = new HashSet<>();
-
-                    for (EndemikModel item : response.body()) {
-                        // Tetap filter Tumbuhan
-                        if (item.getJenis() != null && item.getJenis().equalsIgnoreCase("Tumbuhan")) {
-                            allDataList.add(item);
-                            if (item.getAsal() != null && !item.getAsal().isEmpty()) {
-                                wilayahSet.add(item.getAsal());
-                            }
-                        }
-                    }
-
-                    List<String> listWilayah = new ArrayList<>(wilayahSet);
-                    Collections.sort(listWilayah);
-                    listWilayah.add(0, "Semua Wilayah");
-                    setupSpinner(listWilayah);
-
-                    searchList.clear();
-                    searchList.addAll(allDataList);
-                    adapter.notifyDataSetChanged();
+                    List<EndemikModel> data = response.body();
+                    simpanCache(data);
+                    prosesData(data);
                 }
             }
 
             @Override
             public void onFailure(Call<List<EndemikModel>> call, Throwable t) {
                 Log.e(TAG, "Gagal koneksi: " + t.getMessage());
+                if (isAdded()) {
+                    loadCache();
+                }
             }
         });
+    }
+
+    private void simpanCache(List<EndemikModel> data) {
+        if (getContext() == null) return;
+        AppDatabase db = AppDatabase.getInstance(getContext());
+        List<CacheEndemikEntity> cacheList = new ArrayList<>();
+        for (EndemikModel item : data) {
+            cacheList.add(new CacheEndemikEntity(
+                    item.getNama(), item.getAsal(), item.getGambar(),
+                    item.getDeskripsi(), item.getJenis()
+            ));
+        }
+        db.cacheDao().deleteAll();
+        db.cacheDao().insertAll(cacheList);
+    }
+
+    private void loadCache() {
+        if (getContext() == null) return;
+        AppDatabase db = AppDatabase.getInstance(getContext());
+        List<CacheEndemikEntity> cacheList = db.cacheDao().getAll();
+        if (cacheList.isEmpty()) return;
+
+        List<EndemikModel> data = new ArrayList<>();
+        for (CacheEndemikEntity e : cacheList) {
+            data.add(new EndemikModel(e.nama, e.asal, e.gambar, e.deskripsi, e.jenis));
+        }
+        prosesData(data);
+
+        Snackbar.make(requireView(), "Kamu sedang offline, menampilkan data cache", Snackbar.LENGTH_LONG).show();
+    }
+
+    private void prosesData(List<EndemikModel> data) {
+        allDataList.clear();
+        Set<String> wilayahSet = new HashSet<>();
+
+        for (EndemikModel item : data) {
+            if (item.getJenis() != null && item.getJenis().equalsIgnoreCase("Tumbuhan")) {
+                allDataList.add(item);
+                if (item.getAsal() != null && !item.getAsal().isEmpty()) {
+                    wilayahSet.add(item.getAsal());
+                }
+            }
+        }
+
+        List<String> listWilayah = new ArrayList<>(wilayahSet);
+        Collections.sort(listWilayah);
+        listWilayah.add(0, "Semua Wilayah");
+        setupSpinner(listWilayah);
+
+        searchList.clear();
+        searchList.addAll(allDataList);
+        adapter.notifyDataSetChanged();
     }
 
     private void setupSpinner(List<String> listWilayah) {

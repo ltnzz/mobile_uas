@@ -26,7 +26,7 @@
 
         <activity
             android:name=".DetailActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" /> <!-- Agar CollapsingToolbar terlihat rapi -->
+            android:theme="@style/Theme.UAS" />
 
         <!-- MainActivity TIDAK BOLEH punya intent-filter LAUNCHER lagi -->
         <activity
